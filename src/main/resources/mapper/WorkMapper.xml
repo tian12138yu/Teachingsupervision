@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjy.dao.WorkDao">
+    <select id="getAllWork" resultType="com.tjy.domian.Work">
+       	SELECT * FROM works where 1=1
+        <if test="wname !=null and wname != ''">
+            and wname  like CONCAT('%',#{wname},'%')
+        </if>
+        <if test="tname !=null and tname != ''">
+            and tname  like CONCAT('%',#{tname},'%')
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and ownerName  like CONCAT('%',#{ownerName},'%')
+        </if>
+        <if test="cname !=null and cname != ''">
+            and cname  like CONCAT('%',#{cname},'%')
+        </if>
+        <if test="cid !=null and cid != ''">
+            and cid  like CONCAT('%',#{cid},'%')
+        </if>
+        <if test="week !=null and week != ''">
+            and week  like CONCAT('%',#{week},'%')
+        </if>
+        <if test="tid !=null">
+            and tid  = #{tid}
+        </if>
+        <if test="isfinished !=null">
+            and isfinished  = #{isfinished}
+        </if>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+    <select id="getNoWorks" resultType="com.tjy.domian.Work">
+        SELECT * FROM works
+        <if test="wname !=null ">
+            WHERE wname like #{wname}
+        </if>
+        and isfinished = 2
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+    <select id="getAllWorkNum" resultType="java.lang.Integer">
+        SELECT count(*) FROM works
+    </select>
+
+
+    <select id="getCountEvaluate" resultType="java.lang.Integer">
+        SELECT count(*) FROM form
+    </select>
+
+
+    <select id="getHistoryByCname" resultType="com.tjy.dto.HistoryDto">
+        SELECT createtime,evaluate FROM form
+        where cid = #{cname}
+    </select>
+
+    <select id="getMyWork" resultType="com.tjy.domian.Work">
+        SELECT * FROM works
+        <if test="wname !=null ">
+            WHERE wname like #{wname}
+        </if>
+        and tid = #{id}
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <select id="getAllWorkCounts" resultType="java.lang.Integer">
+       	SELECT count(*) FROM `works` where 1=1
+        <if test="wname !=null and wname != ''">
+            and wname  like CONCAT('%',#{wname},'%')
+        </if>
+        <if test="tname !=null and tname != ''">
+            and tname  like CONCAT('%',#{tname},'%')
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and ownerName  like CONCAT('%',#{ownerName},'%')
+        </if>
+        <if test="cname !=null and cname != ''">
+            and cname  like CONCAT('%',#{cname},'%')
+        </if>
+        <if test="cid !=null and cid != ''">
+            and cid  like CONCAT('%',#{cid},'%')
+        </if>
+        <if test="week !=null and week != ''">
+            and week  like CONCAT('%',#{week},'%')
+        </if>
+    </select>
+
+    <select id="getNoWorksCounts" resultType="java.lang.Integer">
+        SELECT count(*) FROM `works`
+        <if test="wname !=null ">
+            WHERE wname like #{wname}
+        </if>
+        and isfinished = 2
+    </select>
+
+    <select id="getMyWorkCounts" resultType="java.lang.Integer">
+        SELECT count(*) FROM `works`
+        <if test="wname !=null ">
+            WHERE wname like #{wname}
+        </if>
+            and tid = #{id}
+    </select>
+
+
+    <select id="getUpdateWork" resultType="com.tjy.domian.Work">
+        SELECT * FROM works WHERE id = #{id}
+    </select>
+
+    <select id="getWorkById" resultType="com.tjy.domian.Work">
+        SELECT * FROM works WHERE id = #{id}
+    </select>
+
+
+    <insert id="addWork">
+        INSERT INTO works
+            (wname,time,
+        <if test="tid !=null ">
+            tid,
+        </if>
+        <if test="ownerName !=null ">
+            ownerName,
+        </if>
+        <if test="isfinished !=null ">
+            isfinished,
+        </if>
+             cid,cname,tname,creatime,address,week)
+            VALUE
+            (#{wname},#{time},
+        <if test="tid !=null ">
+            #{tid},
+        </if>
+        <if test="ownerName !=null ">
+            #{ownerName},
+        </if>
+        <if test="isfinished !=null ">
+            #{isfinished},
+        </if>
+            #{cid},#{cname},#{tname},#{creatime},#{address},#{week})
+    </insert>
+
+    <update id="editWork">
+        UPDATE works SET wname = #{wname},tid = #{tid},ownerName = #{ownerName},time = #{time} WHERE id = #{id}
+    </update>
+
+    <update id="editWorkStatus">
+        UPDATE works SET isfinished = 1,formid = #{id} WHERE id = #{wid}
+    </update>
+
+    <update id="updateWorkStatus">
+        UPDATE works SET isfinished = 0,tid = #{userId} WHERE id = #{id}
+    </update>
+
+    <update id="receiveWork">
+        UPDATE works SET ownerName = #{name} WHERE id = #{id}
+    </update>
+
+    <update id="updateWorkTeacher">
+        UPDATE works SET ownerName = #{ownerName} , isfinished = 0 WHERE id = #{id}
+    </update>
+
+
+
+    <delete id="deleteWork">
+        DELETE FROM works WHERE id = #{id}
+    </delete>
+
+</mapper>

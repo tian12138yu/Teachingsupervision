@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjy.dao.UserDao">
+    <select id="getUserByMassage" resultType="com.tjy.domian.User">
+       	SELECT * FROM easyUser
+       	WHERE username=#{username} AND password=#{password} and state = 1
+    </select>
+
+    <select id="getStudent" resultType="com.tjy.domian.Student">
+        SELECT * FROM student
+        WHERE username=#{username} AND password=#{password}
+    </select>
+
+    <select id="getCountUserLogin" resultType="java.lang.Integer">
+        SELECT sum(loginTimes) FROM easyUser
+    </select>
+
+
+    <select id="getAllUser" resultType="com.tjy.domian.User">
+       	SELECT * FROM easyUser
+        <if test="username !=null ">
+            WHERE name like #{username}
+        </if>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+    <select id="getUserCounts" resultType="java.lang.Integer">
+       	SELECT count(*) FROM `easyuser`
+        <if test="username !=null ">
+            WHERE username like #{username}
+        </if>
+    </select>
+
+    <select id="getUpdateUser" resultType="com.tjy.domian.User">
+        SELECT * FROM easyuser WHERE id = #{id}
+    </select>
+
+    <select id="getNotice" resultType="com.tjy.domian.Notice">
+        SELECT * FROM notice WHERE type = #{role}
+        <if test="name !=null ">
+            and peopleName = #{name}
+        </if>
+        order by id
+        desc
+        limit 0,10
+    </select>
+
+    <update id="updateState">
+        UPDATE easyuser SET state = #{state} WHERE id = #{id}
+    </update>
+
+    <update id="updateUser">
+        UPDATE easyuser SET lastTime = #{lastTime}, loginTimes = #{loginTimes} WHERE id = #{id}
+    </update>
+
+    <insert id="addUser">
+        INSERT INTO easyuser
+        (name,username,password,phone,role,state,department)
+        VALUE
+        (#{name},#{username},#{password},#{phone},#{role},#{state},#{department})
+    </insert>
+
+    <insert id="insertNotice">
+        INSERT INTO notice
+            (message,type,time,peopleName)
+            VALUE
+            (#{message},#{type},#{time},#{peopleName})
+    </insert>
+
+
+
+    <update id="editUser">
+        UPDATE easyuser SET username = #{username} , password = #{password},
+        phone = #{phone}, department = #{department} WHERE id = #{id}
+    </update>
+
+    <update id="updateNoticeById">
+        UPDATE notice SET state = 1 WHERE id = #{id}
+    </update>
+
+    <delete id="deleteUser">
+        DELETE FROM easyuser WHERE id = #{id}
+    </delete>
+
+    <select id="getUserIdByName" resultType="java.lang.Integer">
+        SELECT id FROM easyuser WHERE name = #{name}
+    </select>
+
+</mapper>

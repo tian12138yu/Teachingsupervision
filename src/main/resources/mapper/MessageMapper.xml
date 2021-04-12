@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tjy.dao.MessageDao">
+    <!--映射实体-->
+
+    <select id="getAllStudent" resultType="com.tjy.domian.Student">
+        SELECT * from student where 1=1
+        <if test="name !=null and '' != name" >
+            and name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="sid !=null ">
+            and sid = #{sid}
+        </if>
+        <if test="cid !=null ">
+            and cid = #{cid}
+        </if>
+        <if test="department !=null and department != '' ">
+            and department like CONCAT('%',#{department},'%')
+        </if>
+        <if test="major !=null and major != '' " >
+            and major like CONCAT('%',#{major},'%')
+        </if>
+        LIMIT #{pageStart},#{pageSize}
+
+    </select>
+
+
+    <select id="getCountStudent" resultType="java.lang.Integer">
+        SELECT count(*)from student where 1=1
+        <if test="name !=null and '' != name" >
+            and name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="sid !=null ">
+            and sid = #{sid}
+        </if>
+        <if test="cid !=null ">
+            and cid = #{cid}
+        </if>
+        <if test="department !=null and department != '' ">
+            and department = CONCAT('%',#{department},'%')
+        </if>
+        <if test="major !=null and major != '' " >
+            and major = CONCAT('%',#{major},'%')
+        </if>
+
+    </select>
+
+
+    <select id="getClassListByInfo" resultType="com.tjy.domian.Class">
+        SELECT * from class where 1=1
+        <if test="cid !=null and '' != cid" >
+            and cid like CONCAT('%',#{cid},'%')
+        </if>
+        <if test="cname !=null  and cname != ''">
+            and cname like CONCAT('%',#{cname},'%')
+        </if>
+        <if test="department !=null and department != '' ">
+            and department like CONCAT('%',#{department},'%')
+        </if>
+        <if test="major !=null and major != '' " >
+            and major like CONCAT('%',#{major},'%')
+        </if>
+        LIMIT #{pageStart},#{pageSize}
+
+    </select>
+
+
+    <select id="getClassListCount" resultType="java.lang.Integer">
+        SELECT count(*) from class where 1=1
+        <if test="cid !=null and '' != cid" >
+            and cid like CONCAT('%',#{cid},'%')
+        </if>
+        <if test="cname !=null  and cname != ''">
+            and cname like CONCAT('%',#{cname},'%')
+        </if>
+        <if test="department !=null and department != '' ">
+            and department like CONCAT('%',#{department},'%')
+        </if>
+        <if test="major !=null and major != '' " >
+            and major like CONCAT('%',#{major},'%')
+        </if>
+
+    </select>
+
+
+
+    <select id="getCourseByid" resultType="com.tjy.domian.Course">
+        SELECT * from course where cid in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="getNoCourseByList" resultType="com.tjy.domian.Course">
+        SELECT * from course where cid not in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="getClassList" resultType="com.tjy.domian.Class">
+        SELECT * from class
+    </select>
+
+    <select id="getUpdateStudent" resultType="com.tjy.domian.Student">
+        SELECT * from student where sid = #{sid}
+    </select>
+
+    <select id="getCourseidzBycid" resultType="java.lang.Integer">
+        SELECT courseId from class_course where classId = #{cid}
+    </select>
+
+
+    <select id="getCouseIdWithoutCid" resultType="java.lang.Integer">
+        SELECT courseId from class_course where classId = #{cid}
+    </select>
+
+    <select id="getStudentCourseById" resultType="com.tjy.domian.Student">
+        SELECT * from student where id = #{id}
+    </select>
+
+
+
+    <update id="editStudent">
+        UPDATE student SET username = #{username},password = #{password},cid = #{cid},cname = #{cname},department = #{department},
+            major = #{major}
+        WHERE sid = #{sid}
+    </update>
+
+
+    <insert id="addStudent">
+        INSERT INTO student
+        (name,cid, cname,username,password,department,major,sid)
+        VALUES
+        (#{name},#{cid},#{cname},#{username},#{password},#{department},#{major},#{sid})
+    </insert>
+
+
+    <insert id="addClass">
+        INSERT INTO class
+            (cid, cname,department,major)
+        VALUES
+        (#{cid},#{cname},#{department},#{major})
+    </insert>
+
+
+    <insert id="insertClassCourse">
+        INSERT INTO class_course
+            (courseId, classId)
+        VALUES
+            (#{courseId},#{classId})
+    </insert>
+
+    <delete id="deleteStudent">
+        DELETE FROM student WHERE sid = #{sid}
+    </delete>
+
+</mapper>
