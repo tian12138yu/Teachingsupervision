@@ -4,17 +4,19 @@ import com.alibaba.fastjson.JSON;
 import com.tjy.dao.AdminDao;
 import com.tjy.dao.UserDao;
 import com.tjy.domian.*;
+import com.tjy.dto.FormDto;
+import com.tjy.dto.FormVo;
 import com.tjy.service.CourseService;
 import com.tjy.service.WorkService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @RestController
+@Slf4j
 public class adminController {
     @Autowired
     AdminDao adminDao;
@@ -216,6 +218,50 @@ public class adminController {
         return JSON.toJSONString(id);
     }
 
+    @CrossOrigin
+    @PostMapping("/newForm")
+    public String newForm(@RequestBody FormDto formDto) {
+        if (Objects.isNull(formDto)) {
+            return "参数错误！";
+        }
+        List<FormVo> domains = formDto.getDomains();
+        if (domains.size() < 1) {
+            return "评价条数错误！";
+        }
+        List<FormVo> formVos = new ArrayList<>(9 - domains.size());
+        for (int i = 0; i < 9 - domains.size(); i++) {
+            formVos.add(new FormVo());
+        }
+        System.out.println(formDto);
+        domains.addAll(formVos);
+        Form form = Form.builder().wid(formDto.getWid())
+                .entry1(domains.get(0).getValue())
+                .entry2(domains.get(1).getValue())
+                .entry3(domains.get(2).getValue())
+                .entry4(domains.get(3).getValue())
+                .entry5(domains.get(4).getValue())
+                .entry6(domains.get(5).getValue())
+                .entry7(domains.get(6).getValue())
+                .entry8(domains.get(7).getValue())
+                .entry9(domains.get(8).getValue())
+                .build();
+        try {
+            adminDao.editForm(form);
+        }catch (Exception e) {
+            log.error("Form error {}",e.toString());
+        }
+
+        return JSON.toJSONString("");
+    }
+
+
+
+    @CrossOrigin
+    @GetMapping("/getFormText")
+    public String getFormText() {
+        List<String> res = adminDao.getFormText();
+        return JSON.toJSONString(res);
+    }
 
 
 

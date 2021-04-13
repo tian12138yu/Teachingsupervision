@@ -70,6 +70,12 @@
     </select>
 
 
+    <select id="getFormText"  resultType="java.lang.String">
+        SELECT value FROM formText
+    </select>
+
+
+
     <select id="getTeacherList"  resultType="java.lang.String" >
         SELECT name FROM easyUser where state = 1 and role = '0' order by name;
     </select>
@@ -120,23 +126,31 @@
     </select>
 
     <select id="getForm" resultType="com.tjy.domian.Form">
-        SELECT * FROM form WHERE id = #{id}
+        SELECT * FROM form WHERE wid = #{id}
     </select>
 
     <insert id="editForm">
         INSERT INTO form
-        (id,wid,situation,attendanceRate,teacherStatus,cid,departmentname,majorname,createtime,evaluate,remarks)
+        (wid,cid,departmentname,createtime,entry1,entry2,entry3,entry4,entry5,entry6,entry7,entry8,entry9,evaluate1,evaluate2,evaluate3,
+         evaluate4,evaluate5,evaluate6,evaluate7,evaluate8,evaluate9,summary,remarks)
         VALUE
-        (#{id},#{wid},#{situation},#{attendanceRate},#{teacherStatus},#{cid},#{departmentname},#{majorname},#{createtime},#{evaluate},#{remarks}) ON DUPLICATE KEY UPDATE wid=values(wid),
-            situation=values(situation),
-            attendanceRate=values(attendanceRate),
-            teacherStatus=values(teacherStatus),
-            cid=values(cid),
+        (#{wid},#{cid},#{departmentname},#{createtime},#{entry1},#{entry2},#{entry3},#{entry4},#{entry5},#{entry6},
+            #{entry7},#{entry8},#{entry9},#{evaluate1},#{evaluate2},#{evaluate3},#{evaluate4},#{evaluate5},#{evaluate6},
+            #{evaluate7},#{evaluate8},#{evaluate9},#{summary},#{remarks}) ON DUPLICATE KEY UPDATE wid=values(wid),
+            evaluate1=values(evaluate1),
+            evaluate2=values(evaluate2),
+            evaluate3=values(evaluate3),
+            evaluate4=values(evaluate4),
+            evaluate5=values(evaluate5),
+            evaluate6=values(evaluate6),
+            evaluate7=values(evaluate7),
+            evaluate8=values(evaluate8),
+            evaluate9=values(evaluate9),
             departmentname=values(departmentname),
-            majorname=values(majorname),
-            createtime=values(createtime),
-            evaluate=values(evaluate),
-            remarks = values(remarks)
+            summary=values(summary),
+            remarks=values(remarks),
+            cid=values(cid),
+            createtime=values(createtime)
     </insert>
 
     <insert id="addWork">

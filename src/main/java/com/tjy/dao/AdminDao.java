@@ -29,4 +29,5 @@ public interface AdminDao {
 
      int getidByName(String val);
 
+    List<String> getFormText();
 }
