@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.Class;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -114,16 +116,34 @@ public class adminController {
     }
 
     @RequestMapping("/getForm")
-    public String getForm(int id){
+    public String getForm(int id) throws IllegalAccessException {
         System.out.println("编号:"+id);
         Form form = adminDao.getForm(id);
+        System.out.println(Objects.isNull(form));
+        if (!Objects.isNull(form) && form.getCreatetime() != null && form.getSummary() == 0) {
+            Class<? extends Object> cls = form.getClass();
+            Field[] fields = cls.getDeclaredFields();
+            int avg = 0;
+            int count = 0;
+            for (int i = 0; i < fields.length; i++) {
+                Field f = fields[i];
+                f.setAccessible(true);
+                if (f.getName().contains("evaluate") && (int)f.get(form) != 0) {
+                    count++;
+                    avg += (int)f.get(form);
+                }
+            }
+            form.setSummary(avg/count);
+            adminDao.editForm(form);
+        }
+
         return JSON.toJSONString(form);
     }
 
     @RequestMapping("/editForm")
     public String editForm(@RequestBody Form form){
         System.out.println("form:"+form);
-        form.setId(form.getWid());
+//        form.setId(form.getWid());
         if (form.getCreatetime() == null || "".equals(form.getCreatetime())) {
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String format = ft.format(new Date());
@@ -246,12 +266,13 @@ public class adminController {
                 .entry9(domains.get(8).getValue())
                 .build();
         try {
-            adminDao.editForm(form);
+            adminDao.insertForm(form);
+            workService.editWorkStatus(form.getWid(),form.getId());
         }catch (Exception e) {
             log.error("Form error {}",e.toString());
         }
 
-        return JSON.toJSONString("");
+        return JSON.toJSONString("成功!");
     }
 
 

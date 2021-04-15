@@ -17,6 +17,6 @@ import java.util.List;
 public class HistoryDto {
 
     private String createtime;
-    private String evaluate;
+    private Integer summary;
 
 }

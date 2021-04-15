@@ -52,7 +52,7 @@
 
 
     <select id="getHistoryByCname" resultType="com.tjy.dto.HistoryDto">
-        SELECT createtime,evaluate FROM form
+        SELECT createtime,summary FROM form
         where cid = #{cname}
     </select>
 

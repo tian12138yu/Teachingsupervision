@@ -126,15 +126,20 @@
     </select>
 
     <select id="getForm" resultType="com.tjy.domian.Form">
-        SELECT * FROM form WHERE wid = #{id}
+        SELECT * FROM form WHERE id = #{id}
     </select>
+
+    <select id="getAverageForm" resultType="com.tjy.domian.Form">
+        SELECT avg(evaluate1,evaluate2,evaluate3,evaluate4,evaluate5,evaluate6,evaluate7,evaluate8,evaluate9) FROM form WHERE id = #{id}
+    </select>
+
 
     <insert id="editForm">
         INSERT INTO form
-        (wid,cid,departmentname,createtime,entry1,entry2,entry3,entry4,entry5,entry6,entry7,entry8,entry9,evaluate1,evaluate2,evaluate3,
+        (id,wid,cid,departmentname,createtime,entry1,entry2,entry3,entry4,entry5,entry6,entry7,entry8,entry9,evaluate1,evaluate2,evaluate3,
          evaluate4,evaluate5,evaluate6,evaluate7,evaluate8,evaluate9,summary,remarks)
         VALUE
-        (#{wid},#{cid},#{departmentname},#{createtime},#{entry1},#{entry2},#{entry3},#{entry4},#{entry5},#{entry6},
+        (#{id},#{wid},#{cid},#{departmentname},#{createtime},#{entry1},#{entry2},#{entry3},#{entry4},#{entry5},#{entry6},
             #{entry7},#{entry8},#{entry9},#{evaluate1},#{evaluate2},#{evaluate3},#{evaluate4},#{evaluate5},#{evaluate6},
             #{evaluate7},#{evaluate8},#{evaluate9},#{summary},#{remarks}) ON DUPLICATE KEY UPDATE wid=values(wid),
             evaluate1=values(evaluate1),
@@ -152,6 +157,70 @@
             cid=values(cid),
             createtime=values(createtime)
     </insert>
+
+    <insert id="insertForm" useGeneratedKeys="true" keyProperty="id" parameterType="com.tjy.domian.Form">
+        INSERT INTO form
+        (wid,
+        <if test="entry1 !=null ">
+            entry1
+        </if>
+        <if test="entry2 !=null ">
+            ,entry2
+        </if>
+        <if test="entry3 !=null ">
+            ,entry3
+        </if>
+        <if test="entry4 !=null ">
+            ,entry4
+        </if>
+        <if test="entry5 !=null ">
+            ,entry5
+        </if>
+        <if test="entry6 !=null ">
+            ,entry6
+        </if>
+        <if test="entry7 !=null ">
+            ,entry7
+        </if>
+        <if test="entry8 !=null ">
+            ,entry8
+        </if>
+        <if test="entry9 !=null ">
+            ,entry9
+        </if>
+        )
+        VALUE
+        (#{wid},
+        <if test="entry1 !=null ">
+            #{entry1}
+        </if>
+        <if test="entry2 !=null ">
+            , #{entry2}
+        </if>
+        <if test="entry3 !=null ">
+            ,#{entry3}
+        </if>
+        <if test="entry4 !=null ">
+            ,#{entry4}
+        </if>
+        <if test="entry5 !=null ">
+            ,#{entry5}
+        </if>
+        <if test="entry6 !=null ">
+            ,#{entry6}
+        </if>
+        <if test="entry7 !=null ">
+            ,#{entry7}
+        </if>
+        <if test="entry8 !=null ">
+            ,#{entry8}
+        </if>
+        <if test="entry9 !=null ">
+            ,#{entry9}
+        </if>
+       )
+    </insert>
+
 
     <insert id="addWork">
         INSERT INTO works

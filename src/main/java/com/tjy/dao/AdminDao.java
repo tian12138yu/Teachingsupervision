@@ -30,4 +30,8 @@ public interface AdminDao {
      int getidByName(String val);
 
     List<String> getFormText();
+
+     void insertForm(Form form);
+
+     Integer getAverageForm(int id);
 }

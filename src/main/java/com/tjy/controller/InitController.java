@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class InitController {
@@ -70,6 +70,8 @@ public class InitController {
     @RequestMapping("/getHistogram1")
     public String getHistogram1() {
         List<Integer> list = menuDao.getDepartmentNum();
+        System.out.println(new ArrayList<>());
         return JSON.toJSONString(list);
+
     }
 }
