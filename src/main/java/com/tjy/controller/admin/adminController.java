@@ -125,12 +125,11 @@ public class adminController {
             Field[] fields = cls.getDeclaredFields();
             int avg = 0;
             int count = 0;
-            for (int i = 0; i < fields.length; i++) {
-                Field f = fields[i];
+            for (Field f : fields) {
                 f.setAccessible(true);
-                if (f.getName().contains("evaluate") && (int)f.get(form) != 0) {
+                if (f.getName().contains("evaluate") && (int) f.get(form) != 0) {
                     count++;
-                    avg += (int)f.get(form);
+                    avg += (int) f.get(form);
                 }
             }
             form.setSummary(avg/count);
