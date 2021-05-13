@@ -32,31 +32,31 @@
 
     <select id="getExcellent" resultType="com.tjy.dto.ExcellentDto">
         SELECT count(id) value,departmentname name from form
-        where evaluate = '优' or evaluate = '良'
+        where summary >= 80
         group by departmentname
     </select>
 
     <select id="getExcellent1" resultType="java.lang.Integer">
         SELECT count(*) from form
-        where evaluate = '优'
+        where summary &gt;=  90
         group by departmentname desc
     </select>
 
     <select id="getGood" resultType="java.lang.Integer">
         SELECT count(*) from form
-        where evaluate = '良'
+        where summary &lt; 90 and summary &gt;= 70
         group by departmentname
     </select>
 
     <select id="getAverage" resultType="java.lang.Integer">
         SELECT count(*) from form
-        where evaluate = '中'
+        where summary &lt; 70 and summary &gt;= 60
         group by departmentname
     </select>
 
     <select id="getPoor" resultType="java.lang.Integer">
     SELECT count(*) from form
-    where evaluate = '差'
+    where summary &lt; 60
     group by departmentname
     </select>
 
@@ -65,6 +65,5 @@
         SELECT count(*) from works
         group by ownerName
     </select>
-
-
+    
 </mapper>
