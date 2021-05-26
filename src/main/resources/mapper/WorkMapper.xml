@@ -158,7 +158,7 @@
     </update>
 
     <update id="updateWorkTeacher">
-        UPDATE works SET ownerName = #{ownerName} , isfinished = 0 WHERE id = #{id}
+        UPDATE works SET ownerName = #{ownerName} , tid = #{tid},isfinished = 0 WHERE id = #{id}
     </update>
 
 

@@ -34,4 +34,6 @@ public interface AdminDao {
      void insertForm(Form form);
 
      Integer getAverageForm(int id);
+
+    String getDepartmentByName(String cid);
 }

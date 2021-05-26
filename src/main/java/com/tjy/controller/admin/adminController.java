@@ -19,6 +19,7 @@ import java.util.*;
 
 @RestController
 @Slf4j
+@CrossOrigin
 public class adminController {
     @Autowired
     AdminDao adminDao;
@@ -90,6 +91,7 @@ public class adminController {
     @RequestMapping("/updateWorkTeacher")
     public String updateWorkTeacher(@RequestBody Work work){
         System.out.println("更新work听课老师:"+work);
+        work.setTid(userDao.getUserIdByName(work.getOwnerName())+"");
         int i  = workService.updateWorkTeacher(work);
         String str = i >0?"success":"error";
         return str;
@@ -147,6 +149,7 @@ public class adminController {
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String format = ft.format(new Date());
             form.setCreatetime(format);
+            form.setDepartmentname(adminDao.getDepartmentByName(form.getCid()));
         }
         try {
             workService.editWorkStatus(form.getWid(),form.getId());

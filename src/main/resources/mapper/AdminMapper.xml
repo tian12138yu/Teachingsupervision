@@ -133,6 +133,11 @@
         SELECT avg(evaluate1,evaluate2,evaluate3,evaluate4,evaluate5,evaluate6,evaluate7,evaluate8,evaluate9) FROM form WHERE id = #{id}
     </select>
 
+    <select id="getDepartmentByName" resultType="java.lang.String">
+        SELECT departmentname from course where cname = #{cid}
+    </select>
+
+
 
     <insert id="editForm">
         INSERT INTO form
